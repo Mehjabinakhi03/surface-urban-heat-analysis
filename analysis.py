@@ -4,62 +4,6 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
 
-def analyze_relationships():
-    dhaka_indices = pd.read_csv("data/csv/Dhakafinal indices.csv")
-
-    # correlation matrix
-    corr_matrix = dhaka_indices[["Lst_1", "NDVISAMPLE", "NDBISAMPLE"]].corr(
-        method="pearson"
-    )
-    print(corr_matrix)
-
-    # Plot Regression Lines
-    plt.figure(figsize=(14, 6))
-
-    # NDVI vs Lst (Greenery vs Temperature)
-    plt.subplot(1, 2, 1)
-    sns.regplot(
-        x="NDVISAMPLE",
-        y="Lst_1",
-        data=dhaka_indices,
-        scatter_kws={"alpha": 0.5},
-        line_kws={"color": "red"},
-    )
-    plt.title("NDVI (Greenery) vs LST (Temperature)")
-    plt.xlabel("NDVI")
-    plt.ylabel("Lst (Temperature)")
-
-    # NDBI vs Lst (Buildings vs Temperature)
-    plt.subplot(1, 2, 2)
-    sns.regplot(
-        x="NDBISAMPLE",
-        y="Lst_1",
-        data=dhaka_indices,
-        scatter_kws={"alpha": 0.5},
-        line_kws={"color": "red"},
-    )
-    plt.title("NDBI (Buildings) vs LST (Temperature)")
-    plt.xlabel("NDBI")
-    plt.ylabel("Lst (Temperature)")
-
-    plt.tight_layout()
-    plt.savefig("data/figures/ScatterPlots.png", dpi=300)
-    plt.show()
-
-    # Multiple Linear Regression
-    print("\nMultiple Linear Regression")
-    X = dhaka_indices[["NDVISAMPLE", "NDBISAMPLE"]]
-    Y = dhaka_indices["Lst_1"]
-
-    X = sm.add_constant(X)
-
-    # Fit the Ordinary Least Squares (OLS) model
-    model = sm.OLS(Y, X).fit()
-
-    print(model.summary())
-
-    print(f"\nR-squared value: {model.rsquared:.4f}")
-
 
 def analyze_hotspots():
     dhaka_hotspots = pd.read_csv("data/csv/Final hotspot z score.csv")
@@ -321,7 +265,6 @@ def rural_area_analysis():
 
 
 def main():
-    analyze_relationships()
     analyze_hotspots()
     compare_zones()
     zonal_statistics()
